@@ -30,7 +30,7 @@ Ce projet a été créée pour le cours de Test unitaire et foncitonnel de la 4I
 
 ## Prérequis
 
-- PostgresSQL
+- Docker ou PostgresSQL
 - NPM et node
 ## Particularité
 
@@ -98,6 +98,12 @@ export class CreateUserDto {
 ```bash
 $ npm install
 ```
+
+Si vous n'avez pas PostgresSQL vous pouvez lancer un conteneur Docker via cette commande 
+```bash
+docker run -e POSTGRES_USER=root -e POSTGRES_PASSWORD=root -e POSTGRES_DB=todolist -d -p 5432:5432 postgres
+```
+
 
 ## Running the app
 
