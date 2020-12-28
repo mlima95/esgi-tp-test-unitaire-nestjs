@@ -27,6 +27,11 @@
 Ce projet a été créée pour le cours de Test unitaire et foncitonnel de la 4IW3 de l'ESGI. Il utilise NestJs, un puissant framework backend utilisant NodeJS et Typescript :
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+
+## Prérequis
+
+- PostgresSQL
+- NPM et node
 ## Particularité
 
 ### Emplacement des fichiers de tests unitaires
