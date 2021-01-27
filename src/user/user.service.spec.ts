@@ -30,7 +30,7 @@ describe('UserService', () => {
       id: '8aaf437c-3308-4ece-93e3-8b1745e7760a',
     });
     mockUser = {
-      birthDate: '1980-12-30',
+      birthDate: new Date(1980, 11, 30).toISOString(),
       email: 'toto@toto.fr',
       firstname: 'toto',
       id: '9bbf437c-3308-4ece-93e3-8b1745e7760b',

@@ -16,7 +16,7 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/user (POST) is not valid', async () => {
+  it('/user (POST) is valid', async () => {
     const response = await request(app.getHttpServer())
       .post('/user')
       .send({
@@ -31,7 +31,5 @@ describe('AppController (e2e)', () => {
       })
       .set('Content-type', 'application/json')
       .expect(201);
-
-    console.log(response.body);
   });
 });
