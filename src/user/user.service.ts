@@ -78,7 +78,6 @@ export class UserService {
   async isValid(user: User) {
     // récupération des possibles erreurs
     const errors = await validate(new CreateUserDto(user));
-
     //s'il y a des erreurs
     if (errors.length) {
       // préparation de la réponse final

@@ -19,13 +19,13 @@ export class MatchMinimumAgeValidatorConstraint
     validationArguments?: ValidationArguments,
   ): boolean | Promise<boolean> {
     // Si pas de date, c'est faux
-    if (!birthDate || !(birthDate instanceof Date)) {
+    if (!birthDate) {
       return false;
     }
 
     // Calcul de l'âge
     const today = new Date();
-    birthDate = birthDate as Date;
+    birthDate = new Date(birthDate);
     let age = today.getFullYear() - birthDate.getFullYear();
     const m = today.getMonth() - birthDate.getMonth();
 
@@ -33,7 +33,6 @@ export class MatchMinimumAgeValidatorConstraint
     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
       age--;
     }
-
     // Return de la réponse
     return age >= Constants.AGE_LIMIT;
   }

@@ -16,27 +16,22 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
-    return request(app.getHttpServer())
-      .get('/')
-      .expect(200)
-      .expect('Hello World!');
-  });
-
-  it('/user (POST) is not valid', () => {
-    return request(app.getHttpServer())
+  it('/user (POST) is not valid', async () => {
+    const response = await request(app.getHttpServer())
       .post('/user')
       .send({
-        birthDate: new Date(2020, 11, 30),
+        birthDate: new Date(1980, 11, 30),
         email: 'toto@toto.fr',
         firstname: 'toto',
-        id: '2',
-        isValid: true,
+        id: '9bbf437c-3308-4ece-93e3-8b1745e7760b',
+        isValid: undefined,
         lastname: 'tata',
-        password: 'regsgdsgrdsg',
+        password: 'regsgdsgrdsgkhkjh',
         todolist: undefined,
       })
       .set('Content-type', 'application/json')
-      .expect(400);
+      .expect(201);
+
+    console.log(response.body);
   });
 });

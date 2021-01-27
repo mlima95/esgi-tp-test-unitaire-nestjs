@@ -1,5 +1,5 @@
 import {
-  IsDate,
+  IsDateString,
   IsEmail,
   IsEmpty,
   IsNotEmpty,
@@ -66,7 +66,7 @@ export class CreateUserDto {
   @IsUserHaveMinimumAge({
     message: Constants.ERROR_MSG_USER_WRONG_AGE,
   })
-  @IsDate({
+  @IsDateString({
     message: Constants.ERROR_MSG_IS_DATE,
   })
   @IsNotEmpty({
