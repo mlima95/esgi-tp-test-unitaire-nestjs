@@ -16,20 +16,9 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/user (POST) is valid', async () => {
+  it('/ (GET) Check hello world ', async () => {
     const response = await request(app.getHttpServer())
-      .post('/user')
-      .send({
-        birthDate: new Date(1980, 11, 30),
-        email: 'toto@toto.fr',
-        firstname: 'toto',
-        id: '9bbf437c-3308-4ece-93e3-8b1745e7760b',
-        isValid: undefined,
-        lastname: 'tata',
-        password: 'regsgdsgrdsgkhkjh',
-        todolist: undefined,
-      })
-      .set('Content-type', 'application/json')
-      .expect(201);
+      .get('/')
+      .expect(200);
   });
 });
