@@ -1,8 +1,14 @@
 import { Exclude } from 'class-transformer';
 import { Todolist } from 'src/todolist/entities/todolist.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-@Entity()
+@Entity({ name: 'Users' })
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -46,6 +52,7 @@ export class User {
   isValid: boolean;
 
   @OneToOne(() => Todolist, (todolist) => todolist.user)
+  @JoinColumn()
   todolist: Todolist;
 
   constructor(partial: Partial<User>) {

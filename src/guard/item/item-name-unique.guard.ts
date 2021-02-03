@@ -12,7 +12,7 @@ export class ItemNameUniqueGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     return this.resolve(
-      context.switchToHttp().getRequest().params.createItemDto,
+      context.switchToHttp().getRequest().body,
     );
   }
 

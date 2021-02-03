@@ -12,6 +12,7 @@ import { Constants } from 'src/shared/constants';
 import { IsUserHaveMinimumAge } from 'src/shared/validators/match-minimum-age.validator';
 import { Todolist } from 'src/todolist/entities/todolist.entity';
 import { User } from '../entities/user.entity';
+import { Transform } from 'class-transformer';
 
 export class CreateUserDto {
   @IsUUID('all', {

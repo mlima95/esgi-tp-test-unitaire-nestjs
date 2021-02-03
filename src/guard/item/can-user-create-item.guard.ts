@@ -8,7 +8,7 @@ export class CanUserCreateItemGuard implements CanActivate {
   async canActivate(context: ExecutionContext) {
     // Get de l'user
     const user = await this.userService.findOne(
-      context.switchToHttp().getRequest().params.createItemDto.todolist.user.id,
+      context.switchToHttp().getRequest().body.todolist.user.id,
     );
 
     return await this.resolve(user);
@@ -16,7 +16,19 @@ export class CanUserCreateItemGuard implements CanActivate {
 
   async resolve(user: User) {
     // SI l'user existe, on return s'il est valide ou non
+    if (!!user) {
+      const u = {
+        id: user.id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        password: user.password,
+        birthDate: new Date(user.birthDate).toISOString(),
+        isValid: user.isValid,
+      };
+      return !!(await this.userService.isValid(u));
+    }
     // SI l'user n'existe pas, il n'a pas le droit, on return false
-    return (await !!user) ? !!this.userService.isValid(user) : false;
+    return false;
   }
 }

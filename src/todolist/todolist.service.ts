@@ -12,8 +12,12 @@ export class TodolistService {
     private todolistRepository: Repository<Todolist>,
   ) {}
 
+  getRepository() {
+    return this.todolistRepository;
+  }
+
   async create(createTodolistDto: CreateTodolistDto) {
-    return await this.todolistRepository.create(createTodolistDto);
+    return this.todolistRepository.create(createTodolistDto);
   }
 
   async findAll() {
@@ -36,6 +40,13 @@ export class TodolistService {
    * @param id
    */
   async findAllItems(id: string) {
-    return (await this.todolistRepository.findOne(id)).items;
+    const t = await this.todolistRepository.findOne(id, {
+      relations: ['user', 'items'],
+    });
+    return t.items;
+  }
+
+  async delete(id: string) {
+    await this.todolistRepository.delete(id);
   }
 }

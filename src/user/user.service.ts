@@ -14,6 +14,10 @@ export class UserService {
     private userRepository: Repository<User>,
   ) {}
 
+  getRepository() {
+    return this.userRepository;
+  }
+
   /**
    * Validate and create and user
    * @param userDto A user ALREADY validate by the DTO logics
@@ -24,7 +28,7 @@ export class UserService {
     // Si on est ici, l'user est valid
     userDto.isValid = true;
 
-    return await this.userRepository.create(userDto);
+    return this.userRepository.save(userDto);
   }
 
   async findAll() {
@@ -75,9 +79,9 @@ export class UserService {
    * @throws la liste des erreurs
    * @return user si pas d'erreur, le même objet est retourné
    */
-  async isValid(user: User) {
+  async isValid(user) {
     // récupération des possibles erreurs
-    const errors = await validate(new CreateUserDto(user));
+    const errors = await validate(new CreateUserDto({ ...user }));
     //s'il y a des erreurs
     if (errors.length) {
       // préparation de la réponse final

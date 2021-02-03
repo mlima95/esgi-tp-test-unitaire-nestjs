@@ -12,7 +12,7 @@ export class ItemCreationGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     return this.resolve(
-      context.switchToHttp().getRequest().params.createItemDto,
+      context.switchToHttp().getRequest().body,
     );
   }
 

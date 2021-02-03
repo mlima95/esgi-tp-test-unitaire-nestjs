@@ -18,17 +18,22 @@ export class ItemService {
     private mailerService: MailerService,
   ) {}
 
+  getRepository() {
+    return this.itemRepository;
+  }
+
   async create(createItemDto: CreateItemDto) {
     try {
       await this.isItemNumberExceed(createItemDto);
       await this.isItemTimeLimit(createItemDto);
       await this.isValid(new Item(createItemDto));
       await this.isItemContentLength(createItemDto);
-      const item = await this.itemRepository.create(createItemDto);
-      if (!!item) {
+      const item = await this.itemRepository.save(createItemDto);
+      if (!item) {
         throw new Error(Constants.ERROR_MSG_ITEM_DIDNT_CREATE);
       }
-      return this.sendMail(item.todolist.id);
+      await this.sendMail(item.todolist.id);
+      return item;
     } catch (error) {
       throw error;
     }
@@ -52,7 +57,7 @@ export class ItemService {
 
   /**
    * Return all items of a todolist
-   * @param id
+   * @param todolistId
    */
   async findAllOfTodolist(todolistId: string) {
     return await this.todolistService.findAllItems(todolistId);
@@ -122,7 +127,7 @@ export class ItemService {
 
   /**
    * Retourne le dernier item créé
-   * @param todoListId
+   * @param todolistId
    */
   async findLastItemOfTodolist(todoListId: string) {
     return await this.itemRepository.find({
@@ -185,9 +190,8 @@ export class ItemService {
   async isItemTimeLimit(item: Item | CreateItemDto) {
     // On récupère la liste des items
     const items = await this.findLastItemOfTodolist(item.todolist.id);
-
     // L'item est présent, on vérifie
-    if (!!items[0].createdDate) {
+    if (!!items[0] && !!items[0].createdDate) {
       // Il y a une date, on la compare à la date actuelle
       // Si le résultat de la soustraction du temps de la date enregistrée
       // et celui de la date actuelle est infierieur à la limite, on refuse l'accès
