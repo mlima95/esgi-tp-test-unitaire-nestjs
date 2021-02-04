@@ -17,9 +17,9 @@ jobs:
 
       - name : Building the project
         run: |
+          npm install -g npm@latest
           npm install
           npm run build
-          npm run start
 
       - name: Unit testing
         run: npm run test
