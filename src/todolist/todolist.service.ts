@@ -17,7 +17,7 @@ export class TodolistService {
   }
 
   async create(createTodolistDto: CreateTodolistDto) {
-    return this.todolistRepository.create(createTodolistDto);
+    return this.todolistRepository.save(createTodolistDto);
   }
 
   async findAll() {
@@ -41,7 +41,7 @@ export class TodolistService {
    */
   async findAllItems(id: string) {
     const t = await this.todolistRepository.findOne(id, {
-      relations: ['user', 'items'],
+      relations: ['user', 'items', 'items.todolist', 'items.todolist.user'],
     });
     return t.items;
   }

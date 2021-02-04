@@ -1,8 +1,12 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { resolveSoa } from 'dns';
+import {
+  CanActivate,
+  ExecutionContext,
+  HttpException,
+  HttpStatus,
+  Injectable,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { CreateItemDto } from 'src/item/dto/create-item.dto';
-import { Item } from 'src/item/entities/item.entity';
 import { ItemService } from 'src/item/item.service';
 
 @Injectable()
@@ -11,12 +15,20 @@ export class ItemNameUniqueGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    return this.resolve(
-      context.switchToHttp().getRequest().body,
-    );
+    return this.resolve(context.switchToHttp().getRequest().body);
   }
 
   async resolve(item: CreateItemDto) {
-    return this.itemService.isItemContentLength(item);
+    try {
+      return this.itemService.isItemContentLength(item);
+    } catch (e) {
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: e.message,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }

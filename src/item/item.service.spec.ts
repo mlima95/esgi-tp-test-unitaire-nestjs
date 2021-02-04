@@ -235,9 +235,10 @@ describe('ItemService', () => {
     jest
       .spyOn(itemRepositoryFake, 'find')
       .mockImplementationOnce(() => [itemInvalid]);
-    expect(
-      await service.isItemTimeLimit(new CreateItemDto(itemInvalid)),
-    ).toBeUndefined();
+
+    await expect(
+      service.isItemTimeLimit(new CreateItemDto(itemValid)),
+    ).rejects.toThrow(Constants.ERROR_MSG_LIMIT_BETWEEN_ITEM_CREATION);
   });
 
   it('Cas Date autorisant de continuer - valide', async () => {
@@ -247,9 +248,9 @@ describe('ItemService', () => {
     jest
       .spyOn(itemRepositoryFake, 'find')
       .mockImplementationOnce(() => [itemValid]);
-    await expect(
-      service.isItemTimeLimit(new CreateItemDto(itemValid)),
-    ).rejects.toThrow(Constants.ERROR_MSG_LIMIT_BETWEEN_ITEM_CREATION);
+    expect(
+      await service.isItemTimeLimit(new CreateItemDto(itemInvalid)),
+    ).toBeUndefined();
   });
 
   it(`Devrait dire que l'item est unique`, async () => {

@@ -1,17 +1,26 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
+import { Constants } from '../../shared/constants';
 
 @Injectable()
 export class CanUserCreateItemGuard implements CanActivate {
   constructor(private userService: UserService) {}
   async canActivate(context: ExecutionContext) {
-    // Get de l'user
-    const user = await this.userService.findOne(
-      context.switchToHttp().getRequest().body.todolist.user.id,
-    );
 
-    return await this.resolve(user);
+    try {
+      // Get de l'user
+      const user = await this.userService.findOne(
+        context.switchToHttp().getRequest().body.todolist.user.id,
+      );
+
+      return await this.resolve(user);
+    } catch (e) {
+      throw new HttpException(
+        Constants.ERROR_MSG_USER_NOT_FOUND,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async resolve(user: User) {

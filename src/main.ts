@@ -3,6 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { useContainer } from 'class-validator';
 import { AppModule } from './app.module';
 import { SharedModule } from './shared/shared.module';
+import { HttpExceptionFilter } from './shared/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -11,6 +12,7 @@ async function bootstrap() {
     fallback: true,
   });
   app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalFilters(new HttpExceptionFilter());
   await app.listen(3000);
 }
 bootstrap();

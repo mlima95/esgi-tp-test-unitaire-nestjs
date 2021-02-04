@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { CreateItemDto } from './dto/create-item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
@@ -30,7 +30,10 @@ export class ItemService {
       await this.isItemContentLength(createItemDto);
       const item = await this.itemRepository.save(createItemDto);
       if (!item) {
-        throw new Error(Constants.ERROR_MSG_ITEM_DIDNT_CREATE);
+        throw new HttpException(
+          Constants.ERROR_MSG_ITEM_DIDNT_CREATE,
+          HttpStatus.BAD_REQUEST,
+        );
       }
       await this.sendMail(item.todolist.id);
       return item;
@@ -64,11 +67,25 @@ export class ItemService {
   }
 
   async findOne(id: string) {
-    return await this.itemRepository.findOne(id);
+    try {
+      return await this.itemRepository.findOne(id);
+    } catch (e) {
+      throw new HttpException(
+        Constants.ERROR_MSG_ITEM_NOT_FOUND,
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   async update(id: string, updateItemDto: UpdateItemDto) {
-    return await this.itemRepository.update(id, updateItemDto);
+    try {
+      return await this.itemRepository.update(id, updateItemDto);
+    } catch (e) {
+      throw new HttpException(
+        Constants.ERROR_MSG_ITEM_NOT_FOUND,
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   /**
@@ -76,7 +93,14 @@ export class ItemService {
    * @param id
    */
   async delete(id: string) {
-    return await this.itemRepository.delete(id);
+    try {
+      return await this.itemRepository.delete(id);
+    } catch (e) {
+      throw new HttpException(
+        Constants.ERROR_MSG_ITEM_NOT_FOUND,
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   /**
@@ -105,7 +129,10 @@ export class ItemService {
     const withoutDup = this.removeDuplicates(items, 'name');
     const res = withoutDup.length === items.length;
     if (!res) {
-      throw new Error(Constants.ERROR_MSG_ITEM_NAME_NOT_UNIQUE);
+      throw new HttpException(
+        Constants.ERROR_MSG_ITEM_NAME_NOT_UNIQUE,
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     return res;
@@ -118,7 +145,10 @@ export class ItemService {
   async isItemContentLength(item: CreateItemDto) {
     if (!!item.content.length) {
       if (item.content.length >= Constants.MAX_CONTENT_LENGTH_STR) {
-        throw new Error(Constants.ERROR_MSG_LENGTH_CONTENT);
+        throw new HttpException(
+          Constants.ERROR_MSG_LENGTH_CONTENT,
+          HttpStatus.BAD_REQUEST,
+        );
       }
       return true;
     }
@@ -127,7 +157,7 @@ export class ItemService {
 
   /**
    * Retourne le dernier item créé
-   * @param todolistId
+   * @param todoListId
    */
   async findLastItemOfTodolist(todoListId: string) {
     return await this.itemRepository.find({
@@ -179,7 +209,7 @@ export class ItemService {
         }
       }
       // Throw d'une erreur avec la réponse finale en message
-      throw new Error(strError);
+      throw new HttpException(strError, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -197,10 +227,12 @@ export class ItemService {
       // et celui de la date actuelle est infierieur à la limite, on refuse l'accès
       const timeBetweenDate =
         new Date().getTime() - items[0].createdDate.getTime();
-
-      const err = !(timeBetweenDate < Constants.LIMIT_BETWEEN_CREATION);
+      const err = timeBetweenDate < Constants.LIMIT_BETWEEN_CREATION;
       if (err) {
-        throw new Error(Constants.ERROR_MSG_LIMIT_BETWEEN_ITEM_CREATION);
+        throw new HttpException(
+          Constants.ERROR_MSG_LIMIT_BETWEEN_ITEM_CREATION,
+          HttpStatus.BAD_REQUEST,
+        );
       }
     }
   }
@@ -215,6 +247,9 @@ export class ItemService {
     // Si pas d'item, on peut ajouter
     if (items.length <= 0) return;
     if (items.length >= Constants.MAX_ITEM_LENGTH)
-      throw new Error(Constants.ERROR_MSG_LIMIT_ITEM_EXCEED);
+      throw new HttpException(
+        Constants.ERROR_MSG_LIMIT_ITEM_EXCEED,
+        HttpStatus.BAD_REQUEST,
+      );
   }
 }

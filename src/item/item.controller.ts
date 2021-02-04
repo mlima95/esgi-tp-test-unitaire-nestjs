@@ -32,6 +32,9 @@ export class ItemController {
     return this.itemService.findOne(id);
   }
 
+  @UseGuards(CanUserCreateItemGuard)
+  @UseGuards(ItemCreationGuard)
+  @UseGuards(ItemNameUniqueGuard)
   @Put(':id')
   update(@Param('id') id: string, @Body() updateItemDto: UpdateItemDto) {
     return this.itemService.update(id, updateItemDto);

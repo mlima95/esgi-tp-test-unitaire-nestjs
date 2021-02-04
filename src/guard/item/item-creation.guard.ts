@@ -1,4 +1,4 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
+import { CanActivate, ExecutionContext, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateItemDto } from 'src/item/dto/create-item.dto';
 import { ItemService } from 'src/item/item.service';
 import { Constants } from 'src/shared/constants';
@@ -17,8 +17,18 @@ export class ItemCreationGuard implements CanActivate {
   }
 
   async resolve(createItem: CreateItemDto) {
-    return await this.itemService.isItemUniqueInTodolist({
-      ...createItem,
-    });
+    try {
+      return await this.itemService.isItemUniqueInTodolist({
+        ...createItem,
+      });
+    } catch (e) {
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: e.message,
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 }
