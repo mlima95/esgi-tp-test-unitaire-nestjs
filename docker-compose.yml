@@ -1,19 +1,13 @@
 version: '3'
 
 services:
-  db:
-    image: postgres:13.1
+  postgres:
     container_name: postgres_container
-    restart: always
+    image: postgres:13
     environment:
-      POSTGRES_PASSWORD: root
       POSTGRES_USER: root
-    volumes:
-      - "./postgres/postgres.conf:/usr/local/etc/postgres/postgres.conf"
-      - postgresdata:/var/lib/postgresql/data
+      POSTGRES_PASSWORD: root
     ports:
-      - 5432:5432
+      - "5432:5432"
+    restart: unless-stopped
 
-volumes:
-  postgresdata:
-    driver: local
