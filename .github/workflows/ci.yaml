@@ -13,7 +13,7 @@ jobs:
       - name: Build database
         run: |
           docker-compose up -d
-          docker exec -it postgres_container psql -U root -c 'CREATE DATABASE todolist;'
+          docker exec postgres_container psql -U root -c 'CREATE DATABASE todolist;'
 
       - name : Building the project
         run: |
