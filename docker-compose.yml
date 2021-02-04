@@ -3,7 +3,7 @@ version: '3'
 services:
   postgres:
     container_name: postgres_container
-    image: postgres:13
+    image: postgres:13.1
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
