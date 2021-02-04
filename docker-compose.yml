@@ -9,6 +9,7 @@ services:
       POSTGRES_PASSWORD: root
       POSTGRES_USER: root
     volumes:
+      - "./postgres/postgres.conf:/usr/local/etc/postgres/postgres.conf"
       - postgresdata:/var/lib/postgresql/data
     ports:
       - 5432:5432
