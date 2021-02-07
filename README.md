@@ -126,6 +126,12 @@ $ npm run test
 
 ```
 
+```bash
+# unit tests
+$ npm run test:e2e
+
+```
+
 ## Contributeur
 
 - LIMA Milan
