@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { HttpStatus, INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 
@@ -30,7 +30,7 @@ describe('UserController (e2e)', () => {
         todolist: undefined,
       })
       .set('Content-type', 'application/json')
-      .expect(400);
+      .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('/user (POST) mail is not valid ', async () => {
@@ -47,7 +47,7 @@ describe('UserController (e2e)', () => {
         todolist: undefined,
       })
       .set('Content-type', 'application/json')
-      .expect(400);
+      .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('/user (POST) firstname is not valid ', async () => {
@@ -64,7 +64,7 @@ describe('UserController (e2e)', () => {
         todolist: undefined,
       })
       .set('Content-type', 'application/json')
-      .expect(400);
+      .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('/user (POST) lastname is not valid ', async () => {
@@ -81,7 +81,7 @@ describe('UserController (e2e)', () => {
         todolist: undefined,
       })
       .set('Content-type', 'application/json')
-      .expect(400);
+      .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('/user (POST) password is not valid ', async () => {
@@ -98,7 +98,7 @@ describe('UserController (e2e)', () => {
         todolist: undefined,
       })
       .set('Content-type', 'application/json')
-      .expect(400);
+      .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('/user (POST) id is not valid ', async () => {
@@ -115,7 +115,7 @@ describe('UserController (e2e)', () => {
         todolist: undefined,
       })
       .set('Content-type', 'application/json')
-      .expect(400);
+      .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('/user (POST) is valid', async () => {
@@ -132,6 +132,6 @@ describe('UserController (e2e)', () => {
         todolist: undefined,
       })
       .set('Content-type', 'application/json')
-      .expect(201);
+      .expect(HttpStatus.CREATED);
   });
 });
